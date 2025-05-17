@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  node1:
+    build: .
+    environment:
+      - NODE_ID=1
+      - ALL_NODES=1,2,3
+    ports:
+      - "5001:5000"    # map host port for logs if needed
+    container_name: node1
+
+  node2:
+    build: .
+    environment:
+      - NODE_ID=2
+      - ALL_NODES=1,2,3
+    ports:
+      - "5002:5000"
+    container_name: node2
+
+  node3:
+    build: .
+    environment:
+      - NODE_ID=3
+      - ALL_NODES=1,2,3
+    ports:
+      - "5003:5000"
+    container_name: node3
