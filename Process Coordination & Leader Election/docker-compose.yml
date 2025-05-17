@@ -5,7 +5,7 @@ services:
     build: .
     environment:
       - NODE_ID=1
-      - ALL_NODES=1,2,3
+      - ALL_NODES=1,2,3,4
     ports:
       - "5001:5000"    # map host port for logs if needed
     container_name: node1
@@ -14,7 +14,7 @@ services:
     build: .
     environment:
       - NODE_ID=2
-      - ALL_NODES=1,2,3
+      - ALL_NODES=1,2,3,4
     ports:
       - "5002:5000"
     container_name: node2
@@ -23,7 +23,16 @@ services:
     build: .
     environment:
       - NODE_ID=3
-      - ALL_NODES=1,2,3
+      - ALL_NODES=1,2,3,4
     ports:
       - "5003:5000"
     container_name: node3
+
+  node4:
+    build: .
+    environment:
+      - NODE_ID=4
+      - ALL_NODES=1,2,3,4
+    ports:
+      - "5004:5000"
+    container_name: node4
