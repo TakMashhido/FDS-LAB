@@ -1,0 +1,70 @@
+version: '3.8'
+
+services:
+  client:
+    build: .
+    container_name: client_1
+    command: python client.py
+    networks:
+      - pbft-net
+    depends_on:
+      - node0
+      - node1
+      - node2
+      - node3
+
+  node0:
+    build: .
+    container_name: node0_1
+    ports:
+      - "5000:5000"
+    environment:
+      - NODE_ID=0
+      - IS_PRIMARY=true
+      - IS_TRAITOR=false
+    command: python pbft_node.py http://node1:5000 http://node2:5000 http://node3:5000
+    networks:
+      - pbft-net
+
+  node1:
+    build: .
+    container_name: node1_1
+    ports:
+      - "5001:5000"
+    environment:
+      - NODE_ID=1
+      - IS_PRIMARY=false
+      - IS_TRAITOR=false
+    command: python pbft_node.py http://node0:5000 http://node2:5000 http://node3:5000
+    networks:
+      - pbft-net
+
+  node2:
+    build: .
+    container_name: node2_1
+    ports:
+      - "5002:5000"
+    environment:
+      - NODE_ID=2
+      - IS_PRIMARY=false
+      - IS_TRAITOR=false
+    command: python pbft_node.py http://node0:5000 http://node1:5000 http://node3:5000
+    networks:
+      - pbft-net
+
+  node3:
+    build: .
+    container_name: node3_1
+    ports:
+      - "5003:5000"
+    environment:
+      - NODE_ID=3
+      - IS_PRIMARY=false
+      - IS_TRAITOR=true 
+    command: python pbft_node.py http://node0:5000 http://node1:5000 http://node2:5000
+    networks:
+      - pbft-net
+
+networks:
+  pbft-net:
+    driver: bridge

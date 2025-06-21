@@ -1,0 +1,59 @@
+version: '3.8'
+
+services:
+  node0:
+    build: .
+    container_name: node0_1
+    ports:
+      - "5000:5000"
+    environment:
+      - NODE_ID=0
+      - IS_COMMANDER=true
+      - IS_TRAITOR=false
+      - ORDER=attack
+    command: python node.py http://node1:5000 http://node2:5000 http://node3:5000
+    networks:
+      - byzantine-net
+
+  node1:
+    build: .
+    container_name: node1_1
+    ports:
+      - "5001:5000"
+    environment:
+      - NODE_ID=1
+      - IS_COMMANDER=false
+      - IS_TRAITOR=false
+    command: python node.py http://node0:5000 http://node2:5000 http://node3:5000
+    networks:
+      - byzantine-net
+
+  node2:
+    build: .
+    container_name: node2_1
+    ports:
+      - "5002:5000"
+    environment:
+      - NODE_ID=2
+      - IS_COMMANDER=false
+      - IS_TRAITOR=true
+    command: python node.py http://node0:5000 http://node1:5000 http://node3:5000
+    networks:
+      - byzantine-net
+
+  node3:
+    build: .
+    container_name: node3_1
+    ports:
+      - "5003:5000"
+    environment:
+      - NODE_ID=3
+      - IS_COMMANDER=false
+      - IS_TRAITOR=true
+    command: python node.py http://node0:5000 http://node1:5000 http://node2:5000
+    networks:
+      - byzantine-net
+
+networks:
+  byzantine-net:
+    driver: bridge
