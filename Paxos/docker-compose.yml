@@ -1,0 +1,35 @@
+version: '3.8'
+
+services:
+  paxos-node-1:
+    build: .
+    ports:
+      - "5001:5000"
+    environment:
+      - NODE_ID=paxos-node-1
+      - PEERS=paxos-node-1:5000,paxos-node-2:5000,paxos-node-3:5000
+    networks:
+      - paxos-net
+
+  paxos-node-2:
+    build: .
+    ports:
+      - "5002:5000"
+    environment:
+      - NODE_ID=paxos-node-2
+      - PEERS=paxos-node-1:5000,paxos-node-2:5000,paxos-node-3:5000
+    networks:
+      - paxos-net
+
+  paxos-node-3:
+    build: .
+    ports:
+      - "5003:5000"
+    environment:
+      - NODE_ID=paxos-node-3
+      - PEERS=paxos-node-1:5000,paxos-node-2:5000,paxos-node-3:5000
+    networks:
+      - paxos-net
+
+networks:
+  paxos-net:
